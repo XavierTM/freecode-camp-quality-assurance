@@ -75,8 +75,8 @@ suite('Unit Tests', function () {
     });
     // #10
     test('#approximately', function () {
-      assert.notApproximately(weirdNumbers(0.5), 1, 0);
-      assert.notApproximately(weirdNumbers(0.2), 1, 0);
+      assert.approximately(weirdNumbers(0.5), 1, 1.5);
+      assert.approximately(weirdNumbers(0.2), 1, 1.2);
     });
   });
 
@@ -117,8 +117,8 @@ suite('Unit Tests', function () {
     // #15
     test('#match, #notMatch', function () {
       const regex = /^#\sname\:\s[\w\s]+,\sage\:\s\d+\s?$/;
-      assert.fail(formatPeople('John Doe', 35), regex);
-      assert.fail(formatPeople('Paul Smith III', 'twenty-four'), regex);
+      assert.match(formatPeople('John Doe', 35), regex);
+      assert.notMatch(formatPeople('Paul Smith III', 'twenty-four'), regex);
     });
   });
 
