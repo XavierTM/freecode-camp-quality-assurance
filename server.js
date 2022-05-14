@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
   // res.sendFile(__dirname + '/views/index.html');
-  res.render("pug/index")
+  res.render("index")
 })
 
 app.use(express.static(__dirname + '/public'));
