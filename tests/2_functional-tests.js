@@ -53,10 +53,12 @@ suite('Functional Tests', function () {
       chai
         .request(server)
         .put('/travellers')
-        .send({ surname: 'da Verrazzanoa Verrazzano' })
+        .send({surname: "da Verrazzano"})
         .end(function (err, res) {
-          assert.isUndefined();
-
+          assert.equal(res.status, 200);
+          assert.equal(res.type, 'application/json');
+          assert.equal(res.body.name, 'Giovanni');
+          assert.equal(res.body.surname, 'da Verrazzano');
           done();
         });
       
