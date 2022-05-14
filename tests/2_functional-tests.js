@@ -5,6 +5,8 @@ const server = require('../server');
 
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
+chai.should();
+const expect = chai.expect();
 
 suite('Functional Tests', function () {
   this.timeout(5000);
@@ -38,8 +40,10 @@ suite('Functional Tests', function () {
         .put('/travellers')
         .send({ surname: 'Colombo' })
         .end(function (err, res) {
-          assert.isUndefined();
-
+          assert.equal(res.status, 200);
+          assert.equal(res.type, 'application/json');
+          assert.equal(res.body.name, 'Cristoforo');
+          assert.equal(res.body.surname, 'Colombo');
           done();
         });
     });
