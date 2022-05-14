@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 
+console.clear();
+
 const cors = require('cors');
 const runner = require('./test-runner');
 
