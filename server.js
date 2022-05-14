@@ -10,12 +10,11 @@ const runner = require('./test-runner');
 const bodyParser = require('body-parser');
 
 app.set('view engine', 'pug');
-app.set("views", __dirname + "/views");
+// app.set("views", __dirname + "/views");
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-  // res.sendFile(__dirname + '/views/index.html');
-  res.render("index.html")
+  res.render(__dirname + '/views/index');
 })
 
 app.use(express.static(__dirname + '/public'));
