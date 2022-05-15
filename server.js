@@ -54,7 +54,7 @@ function getDbClient() {
 
   passport.deserializeUser((id, done) => {
     usersCollection.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-      done(null, null);
+      done(null, doc);
     });
   });
 
