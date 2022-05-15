@@ -31,12 +31,20 @@ function getDbClient() {
   });
 }
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+};
+
 (async () => {
 
-
+  // setup database
   const client = await getDbClient();
   const userCollection = await client.db('database').collection('users');
 
+  // middlewares
   app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
@@ -78,6 +86,8 @@ function getDbClient() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+
+  // routes
   app.route('/').get((req, res) => {
     res.render(__dirname + '/views/pug', {
       title: 'Connected to Database', 
@@ -90,6 +100,11 @@ function getDbClient() {
   app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), function(req, res) {
     res.send();
   });
+
+  app.route('/profile')
+    .get(ensureAuthenticated, (req,res) => {
+      res.render(process.cwd() + '/views/pug/profile');
+    });
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
