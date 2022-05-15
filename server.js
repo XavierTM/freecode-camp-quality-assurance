@@ -9,6 +9,7 @@ const { ObjectID } = require('mongodb');
 const fccTesting = require('./freeCodeCamp/fcctesting.js');
 const session = require('express-session');
 const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 
 const app = express();
@@ -34,7 +35,7 @@ function getDbClient() {
 
 
   const client = await getDbClient();
-  const usersCollection = await client.db('database').collection('users');
+  const userCollection = await client.db('database').collection('users');
 
   app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -47,13 +48,26 @@ function getDbClient() {
   app.use(passport.session());
 
 
+  passport.use(new LocalStrategy(
+    function(username, password, done) {
+      userCollection.findOne({ username: username }, function (err, user) {
+        console.log('User '+ username +' attempted to log in.');
+        if (err) { return done(err); }
+        if (!user) { return done(null, false); }
+        if (password !== user.password) { return done(null, false); }
+        return done(null, user);
+      });
+    }
+  ));
+
+
 
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
 
   passport.deserializeUser((id, done) => {
-    usersCollection.findOne({ _id: new ObjectID(id) }, (err, doc) => {
+    userCollection.findOne({ _id: new ObjectID(id) }, (err, doc) => {
       done(null, doc);
     });
   });
