@@ -108,6 +108,21 @@ function ensureAuthenticated(req, res, next) {
       });
     });
 
+
+  app.route('/logout')
+    .get((req, res) => {
+      req.logout();
+      res.redirect('/');
+    });
+
+
+  /// not found route
+  app.use((req, res, next) => {
+    res.status(404)
+      .type('text')
+      .send('Not Found');
+  });
+
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log('Listening on port ' + PORT);
