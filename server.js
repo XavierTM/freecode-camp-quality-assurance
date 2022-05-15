@@ -61,9 +61,16 @@ function ensureAuthenticated(req, res, next) {
     function(username, password, done) {
       userCollection.findOne({ username: username }, function (err, user) {
         console.log('User '+ username +' attempted to log in.');
+
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
-        if (!bcrypt.compareSync(password, user.password)) { return done(null, false); }
+
+
+        const credentialsAreValid = bcrypt.compareSync(password, user.password);
+        if (!credentialsAreValid) {
+          return done(null, false); 
+        }
+
         return done(null, user);
       });
     }
@@ -132,7 +139,7 @@ function ensureAuthenticated(req, res, next) {
 
 
   app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), function(req, res) {
-    res.send();
+    res.redirect('/profile');
   });
 
   app.route('/profile')
