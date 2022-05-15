@@ -79,7 +79,11 @@ function getDbClient() {
   app.use(express.urlencoded({ extended: true }));
 
   app.route('/').get((req, res) => {
-    res.render(__dirname + '/views/pug', {title: 'Connected to Database', message: 'Please login'});
+    res.render(__dirname + '/views/pug', {
+      title: 'Connected to Database', 
+      message: 'Please login',
+      showLogin: true,
+    });
   });
 
   const PORT = process.env.PORT || 3000;
